@@ -144,6 +144,4 @@ Original analysis code and associated documentation authored by William Elson in
 
 This licence does **not** apply to confidential patient-level data, which are not included. It also does not grant rights to third-party clinical terminologies, codelists, business rules or other materials for which the author does not hold redistribution or sublicensing rights. Such materials remain subject to their own applicable terms and should be used only where permission has been obtained.
 
-## Contact
 
-For questions about the analysis or repository, contact Dr William Elson at [william.elson@phc.ox.ac.uk](mailto:william.elson@phc.ox.ac.uk).
