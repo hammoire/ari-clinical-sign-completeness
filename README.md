@@ -3,6 +3,12 @@
 **Author:** Dr William Elson  
 **Contact:** [william.elson@phc.ox.ac.uk](mailto:william.elson@phc.ox.ac.uk) AND [william.elson@lshtm.ac.uk](mailto:william.elson@lshtm.ac.uk)
 
+## Associated publication
+
+**Manuscript:** *Completeness and temporal stability of clinical sign recording in primary care EHRs to inform acute respiratory infection severity surveillance: a retrospective cohort study, 2008–2024.*  
+**Journal:** [BMJ Health & Care Informatics](https://informatics.bmj.com/)  
+**Publication DOI:** Pending publication. Add the live DOI link here when assigned, using the format `https://doi.org/INSERT_DOI_HERE`. This placeholder is **not** a publication link.  
+**Citation:** Full bibliographic details will be added when available.
 
 ## Overview
 
@@ -70,13 +76,45 @@ Scripts generate weekly episode-count and completeness plots, seasonal summaries
 
 The scripts generate the principal descriptive tables, completeness heatmap, adjusted-odds-ratio forest plots, time-series figure, interrupted time-series comparison plot and sensitivity-analysis figures. Figures are written to an `output/` directory created by the scripts; the restricted input data are not included.
 
-## Clinical codelists
+## Clinical codelists and phenotype definitions
 
-Clinical codelists used in the study are provided or linked where redistribution is permitted. These include codelists for structured recordings of respiratory rate, oxygen saturation, systolic blood pressure, pulse rate and temperature.
+The manuscript's supplementary material (Supplement 6) provides context on the software, codelists, data availability and analysis code. This section identifies the main phenotype sources and explains which materials can be shared. Codelists developed for the study are made available in the repository where redistribution is permitted; the underlying EHR extracts are not shared. Refer to the manuscript and supplementary material for the full study-specific implementation details.
 
-Ethnicity was derived using a SNOMED CT-based phenotype aligned with the 2021 UK Census ethnicity classification. Supporting phenotype documentation and codelists are included or linked where appropriate.
+### Acute respiratory infection (ARI) phenotype
 
-Clinical risk groups were defined using relevant UK Health Security Agency guidance and PRIMIS business rules. Where third-party licensing or intellectual-property restrictions prevent redistribution, the relevant material is not reproduced; its source and implementation are documented where possible.
+ARI episodes and subtypes were identified using a clinical phenotyping algorithm previously described and validated by Elson and colleagues:
+
+Elson WH, et al. *Validation of an acute respiratory infection phenotyping algorithm to support robust computerised medical record-based respiratory sentinel surveillance, England, 2023.* **Eurosurveillance**. 2024;29(35):2300682. [https://doi.org/10.2807/1560-7917.ES.2024.29.35.2300682](https://doi.org/10.2807/1560-7917.ES.2024.29.35.2300682).
+
+The analysis distinguishes upper respiratory tract infection (URTI), lower respiratory tract infection (LRTI), influenza-like illness (ILI), exacerbation of chronic lung disease (ECLD), suspected COVID-19 and ARI not otherwise specified (ARI NOS). Consult the validation publication, associated phenotype material and shareable ARI codelists for the underlying definitions rather than treating these short labels as standalone diagnostic criteria.
+
+### Clinical-sign recording codelists
+
+The clinical-sign codelists identify structured EHR recordings of the five objective measurements investigated in the study:
+
+- Respiratory rate
+- Oxygen saturation
+- Systolic blood pressure
+- Pulse rate
+- Temperature
+
+The analysis derives an episode-level recording indicator for each sign and an additional indicator for whether **any** of the five signs was recorded within the specified ascertainment window. These indicators describe *recording completeness*, not whether a measurement was clinically normal or abnormal. The sensitivity analysis varies the ascertainment window relative to the ARI episode date; its daily analysis uses the earliest eligible recording date per sign, so it describes the timing of first recording rather than every repeated measurement.
+
+Shareable clinical-sign codelists and their supporting documentation are provided under `codelists/` where available. The data extracts and the records in which the codes occurred are not included.
+
+### Ethnicity phenotype
+
+Ethnicity was derived from SNOMED CT-coded primary care records using a phenotype aligned with the 2021 UK Census classification. The analysis uses five broad groups—Asian, Black, Mixed, White and Other—and an explicit Missing category where ethnicity was not recorded. Shareable ethnicity codelists and phenotype documentation are included or linked in the repository where permitted; consult the manuscript supplement for the study-specific derivation.
+
+### Clinical risk groups and PRIMIS business rules
+
+Clinical risk-group variables were defined with reference to relevant UK Health Security Agency (UKHSA) guidance and PRIMIS business rules. The analysis distinguishes **any clinical risk group** (`rg_any`) from a **respiratory clinical risk group** (`rg_resp`). The UKHSA [influenza Green Book chapter](https://www.gov.uk/government/publications/influenza-the-green-book-chapter) provides background on clinical risk categories; the manuscript and supplement should be consulted for the guidance and implementation applicable to this particular study, rather than assuming that subsequent revisions of the guidance were used retrospectively.
+
+The PRIMIS-derived codelists and business rules are third-party materials and may be subject to licensing or intellectual-property restrictions. Where redistribution is not authorised, the full lists or business rules are **not** reproduced in this repository. For enquiries about the relevant PRIMIS materials and permission to access or reuse them, contact PRIMIS at **[enquiries@primis.nottingham.ac.uk](mailto:enquiries@primis.nottingham.ac.uk)**. This contact is for PRIMIS materials, **not** for obtaining access to the restricted RSC/ORCHID patient-level data.
+
+### Availability and licensing of codelists
+
+Not every phenotype definition can necessarily be redistributed in full. Availability of a reference or a code list in this repository does not imply permission to redistribute its underlying third-party terminology or business rules. The [MIT License](LICENSE) covers original code and documentation authored for this repository; third-party clinical terminologies, PRIMIS materials and other restricted content remain subject to their own terms. Consult the relevant source or rights holder before reusing those materials.
 
 ## Reproducibility
 
@@ -88,11 +126,9 @@ The repository provides shareable analysis code, definitions and documentation o
 
 Analyses were conducted in **R version 4.5.1**. Required packages are described alongside their `library()` calls in the scripts. Package versions or session information may be added to improve reproducibility.
 
-## Manuscript
+## Manuscript and citation details
 
-**Title:** *Completeness and temporal stability of clinical sign recording in primary care EHRs to inform acute respiratory infection severity surveillance: a retrospective cohort study, 2008–2024.*  
-**Journal:** BMJ Health & Care Informatics  
-**Manuscript DOI:** To be added following publication.
+The associated manuscript title, journal and DOI placeholder are listed in [Associated publication](#associated-publication) at the top of this README. The DOI will be linked once assigned.
 
 ## Citation
 
