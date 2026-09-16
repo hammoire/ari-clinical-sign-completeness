@@ -1,189 +1,113 @@
 # Completeness and temporal stability of clinical sign recording in primary care EHRs to inform acute respiratory infection severity surveillance: a retrospective cohort study, 2008–2024
 
+**Author:** Dr William Elson  
+**Contact:** [william.elson@phc.ox.ac.uk](mailto:william.elson@phc.ox.ac.uk) AND [william.elson@lshtm.ac.uk](mailto:william.elson@lshtm.ac.uk)
+
+
 ## Overview
 
-This repository contains analysis code, clinical codelists, and supporting documentation for the study:
+This repository contains analysis code, clinical codelists and supporting documentation for the study:
 
-**Completeness and temporal stability of clinical sign recording in primary care EHRs to inform acute respiratory infection severity surveillance: a retrospective cohort study, 2008–2024.**
+*Completeness and temporal stability of clinical sign recording in primary care EHRs to inform acute respiratory infection severity surveillance: a retrospective cohort study, 2008–2024.*
 
 The study examined the completeness and temporal stability of structured clinical-sign recording for acute respiratory infection (ARI) episodes in primary care electronic health records (EHRs) over 16 influenza seasons, from 2008–09 to 2023–24.
 
-The analyses assessed recording of five objective clinical signs:
+The five objective clinical signs examined were respiratory rate, oxygen saturation, systolic blood pressure, pulse rate and temperature.
 
-- respiratory rate
-- oxygen saturation
-- systolic blood pressure
-- pulse rate
-- temperature
-
-The repository is intended to support transparency and reproducibility by making the analysis code and relevant clinical codelists available alongside the manuscript.
+This repository is intended to support transparency and reproducibility by sharing the analysis code and relevant clinical codelists alongside the manuscript, subject to data-governance and licensing restrictions.
 
 ## Data availability
 
-No individual-level patient data are included in this repository.
+**No patient-level data are included in this repository.**
 
 The study used routinely collected primary care EHR data from the Oxford–Royal College of General Practitioners Research and Surveillance Centre (RSC), securely hosted within the Oxford Clinical Informatics Digital Hub (ORCHID).
 
-The underlying patient-level data cannot be made publicly available because they contain confidential health information and are subject to information governance, data protection, and data-access restrictions.
-
-Accordingly, this repository does **not** contain:
-
-- patient-level EHR data
-- identifiable or potentially identifiable clinical information
-- extracts from the underlying research database
-- credentials or access information for ORCHID or RSC data
+The underlying patient-level data cannot be made publicly available because they contain confidential health information and are subject to information-governance, data-protection and data-access restrictions. This repository does not contain patient-level EHR data, identifiable or potentially identifiable clinical information, extracts from the underlying research database, or credentials and access information for RSC/ORCHID data.
 
 Researchers wishing to access the underlying data must follow the relevant RSC/ORCHID data-access and information-governance procedures.
 
 ## Repository contents
 
-The repository contains the code and supporting materials used to document and reproduce the analytical methods described in the manuscript, subject to data-governance and licensing restrictions.
-
-A suggested structure is:
+The analysis scripts are kept directly in the top-level `R/` directory, rather than in a nested `R/R/` directory. A simplified layout is:
 
 ```text
 ari-clinical-sign-completeness/
-│
 ├── README.md
-├── CITATION.cff
 ├── LICENSE
-│
-├── code/
-│   ├── 01_cohort_and_completeness.R
-│   ├── 02_regression_analysis.R
-│   ├── 03_sensitivity_analyses.R
-│   ├── 04_temporal_analysis.R
-│   └── 05_figures_tables.R
-│
-├── codelists/
-│   ├── clinical_signs/
-│   ├── ethnicity/
-│   └── README.md
-│
-└── documentation/
-    └── analysis_notes.md
+├── R/
+│   └── [analysis scripts in .R format]
+└── codelists/
+    └── [shareable codelists and associated documentation]
 ```
+
+The bracketed entries describe contents rather than literal file names. Other supporting files may be present. The repository does not include the restricted input datasets required to execute the scripts.
 
 ## Analysis code
 
-The analysis code documents the main analytical workflow used in the study.
+The `R/` directory contains scripts for the analyses and outputs described below. They document the analytical steps that can be shared, but do not include the restricted data-loading procedures or the underlying patient-level inputs.
 
-### 1. Cohort and completeness
+### Study population and descriptive completeness
 
-Code used to:
+Scripts report eligible patient and ARI episode counts, describe episode-level characteristics, and summarise the completeness of individual clinical signs and of any clinical sign, including analyses by ARI subtype and patient characteristics.
 
-- identify eligible ARI episodes
-- apply the study observation period
-- define the primary clinical-sign ascertainment window
-- calculate recording completeness for each clinical sign
-- calculate completeness for recording of any clinical sign
-- stratify completeness by ARI subtype and patient characteristics
+### Adjusted completeness analysis
 
-### 2. Adjusted regression analysis
+A multivariable logistic regression examines factors associated with recording any clinical sign, including ARI subtype, age group, sex, ethnicity and clinical risk-group status.
 
-Code used for the multivariable logistic regression examining factors associated with recording of any clinical sign.
+One ARI episode is randomly selected per person per respiratory season for this analysis. Standard errors are clustered at general-practice level.
 
-The model includes:
+### Sensitivity analyses
 
-- ARI subtype
-- age group
-- sex
-- ethnicity
-- clinical risk-group status
+Scripts examine alternative clinical-sign ascertainment windows, including daily and cumulative recording completeness and an adjusted analysis using a −7 to +7-day window. Daily results based on the earliest recorded date indicate when a sign was **first recorded**, not every day on which it may have been recorded.
 
-To reduce the influence of multiple ARI episodes within the same individual while retaining information across time, one ARI episode was randomly selected per person per surveillance season.
+### Temporal analysis and interrupted time series
 
-Robust standard errors were clustered at general-practice level.
+Scripts generate weekly episode-count and completeness plots, seasonal summaries, and a post hoc interrupted time-series analysis from 2013 onwards. The segmented quasibinomial model estimates the pre-interruption trend, immediate level change and subsequent trend. Newey–West covariance estimates are used to account for serial correlation, with four-week and 13-week lag specifications.
 
-### 3. Sensitivity analyses
+**Breakpoint date to reconcile before publication:** the draft manuscript description supplied for this README gives **1 March 2020**, whereas the shared R script sets **1 April 2020**. The README and manuscript must match the code used for the reported results.
 
-Code used to examine the effect of alternative clinical-sign ascertainment windows and other prespecified sensitivity analyses described in the manuscript and supplementary material.
+### Figures and tables
 
-### 4. Temporal analysis
-
-Code used to assess temporal patterns in clinical-sign recording, including the interrupted time-series analysis.
-
-The post hoc interrupted time-series analysis used segmented quasibinomial regression from 2013 onwards with a breakpoint at 1 March 2020.
-
-The model estimated:
-
-- the pre-pandemic trend
-- the immediate pandemic-associated level change
-- the post-pandemic-onset trend
-
-Newey–West standard errors were used to account for residual serial correlation.
-
-### 5. Figures and tables
-
-Code used to generate the principal analytical outputs reported in the manuscript, where these can be reproduced without releasing restricted patient-level data.
+The scripts generate the principal descriptive tables, completeness heatmap, adjusted-odds-ratio forest plots, time-series figure, interrupted time-series comparison plot and sensitivity-analysis figures. Figures are written to an `output/` directory created by the scripts; the restricted input data are not included.
 
 ## Clinical codelists
 
-Clinical codelists used in the study are provided where redistribution is permitted.
-
-These include codelists used to identify structured recordings of:
-
-- respiratory rate
-- oxygen saturation
-- systolic blood pressure
-- pulse rate
-- temperature
+Clinical codelists used in the study are provided or linked where redistribution is permitted. These include codelists for structured recordings of respiratory rate, oxygen saturation, systolic blood pressure, pulse rate and temperature.
 
 Ethnicity was derived using a SNOMED CT-based phenotype aligned with the 2021 UK Census ethnicity classification. Supporting phenotype documentation and codelists are included or linked where appropriate.
 
-Clinical risk groups were defined using the relevant UK Health Security Agency guidance and PRIMIS business rules. Where third-party licensing or intellectual-property restrictions prevent redistribution of particular codelists or business rules, these materials are not reproduced in this repository; instead, their source and implementation are documented.
+Clinical risk groups were defined using relevant UK Health Security Agency guidance and PRIMIS business rules. Where third-party licensing or intellectual-property restrictions prevent redistribution, the relevant material is not reproduced; its source and implementation are documented where possible.
 
 ## Reproducibility
 
-Because the source patient-level data cannot be shared publicly, the code in this repository cannot be run end-to-end without authorised access to the underlying RSC/ORCHID data.
+The repository cannot be run end-to-end without authorised access to the underlying RSC/ORCHID data. Some scripts expect pre-derived episode-level or weekly summary datasets and contain placeholders in place of restricted data-import commands.
 
-The repository is therefore intended to provide:
-
-- transparency about the analytical methods
-- reproducible code for the statistical analyses
-- definitions of derived variables where shareable
-- clinical codelists where redistribution is permitted
-- documentation of analytical decisions and sensitivity analyses
-
-No synthetic or reconstructed patient-level dataset is provided.
+The repository provides shareable analysis code, definitions and documentation of derived variables where available, codelists where redistribution is permitted, and documentation of analytical decisions and sensitivity analyses. No synthetic or reconstructed patient-level dataset is provided.
 
 ## Software
 
-Analyses were conducted in:
-
-- **R version 4.5.1**
-
-Package versions and software dependencies should be recorded in the repository to support reproducibility.
-
-Where practical, a package environment or session information file should be included.
+Analyses were conducted in **R version 4.5.1**. Required packages are described alongside their `library()` calls in the scripts. Package versions or session information may be added to improve reproducibility.
 
 ## Manuscript
 
-**Title:**  
-*Completeness and temporal stability of clinical sign recording in primary care EHRs to inform acute respiratory infection severity surveillance: a retrospective cohort study, 2008–2024.*
-
-**Journal:** BMJ Health & Care Informatics
-
+**Title:** *Completeness and temporal stability of clinical sign recording in primary care EHRs to inform acute respiratory infection severity surveillance: a retrospective cohort study, 2008–2024.*  
+**Journal:** BMJ Health & Care Informatics  
 **Manuscript DOI:** To be added following publication.
 
 ## Citation
 
-If you use material from this repository, please cite the associated manuscript once published.
-
-A formal citation and `CITATION.cff` file will be added when publication details are available.
+If you use material from this repository, please cite the associated manuscript once published. A formal citation and `CITATION.cff` file may be added when publication details are available.
 
 ## Versioning
 
-The repository may be updated during peer review.
-
-The version corresponding to the final accepted manuscript should be preserved as a tagged release so that the exact code and codelists associated with the published analysis remain accessible.
+The repository may be updated during peer review. The version corresponding to the final accepted manuscript should be preserved as a tagged release so that the associated code and codelists remain accessible.
 
 ## Licence
 
-A licence will be applied to material created by the authors where appropriate.
+Original analysis code and associated documentation authored by William Elson in this repository are made available under the **MIT License**; see [LICENSE](LICENSE). The licence permits use, modification and redistribution subject to retention of the copyright and licence notice.
 
-Some clinical terminologies, codelists, business rules, or other third-party materials may be subject to separate licensing or redistribution restrictions. Inclusion in this repository does not override those restrictions.
+This licence does **not** apply to confidential patient-level data, which are not included. It also does not grant rights to third-party clinical terminologies, codelists, business rules or other materials for which the author does not hold redistribution or sublicensing rights. Such materials remain subject to their own applicable terms and should be used only where permission has been obtained.
 
 ## Contact
 
-For questions about the analysis or repository, please contact the corresponding author through the contact details provided in the manuscript.
+For questions about the analysis or repository, contact Dr William Elson at [william.elson@phc.ox.ac.uk](mailto:william.elson@phc.ox.ac.uk).
